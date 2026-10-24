@@ -1,0 +1,29 @@
+# Python environments and caches
+**/.venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Secrets & Environment variables
+**/.env
+!**/.env.example
+
+# Generated audio and model caches
+**/outputs/
+**/checkpoints/
+**/models/
+**/.cache/
+*.wav
+
+# Frontend
+**/node_modules/
+**/dist/
+
+# External model repository (keep upstream clone separate)
+model/OmniVoice/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
