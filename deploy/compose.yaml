@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: omnivoice-backend:latest
+    container_name: omnivoice-api
+    environment:
+      TTS_DEVICE: cpu
+      OMNIVOICE_MODEL_ID: k2-fsa/OmniVoice
+      OUTPUT_DIR: /app/outputs
+      FRONTEND_ORIGIN: http://localhost:8080
+    volumes:
+      - audio_outputs:/app/outputs
+      - model_cache:/root/.cache
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: omnivoice-frontend:latest
+    container_name: omnivoice-ui
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  audio_outputs:
+  model_cache:
